@@ -1,0 +1,75 @@
+/* Block interactions while swapping so the illusion is clean */
+body.swap-active { cursor: default; }
+.swap-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+}
+
+/* Ghost buttons reuse your gradients for perfect visual match */
+.btn-ghost {
+  border-radius: 15px;
+  font-size: 1.5rem;
+  color: white;
+  user-select: none;
+}
+
+.btn-ghost.yes-btn {
+  background: linear-gradient(135deg, #7dffb2, #36d1dc);
+}
+
+.btn-ghost.no-btn {
+  background: linear-gradient(135deg, #ff9a9e, #fad0c4);
+}
+
+/* (existing styles likely already present in your file) */
+body {
+  margin: 0;
+  font-family: "Comic Sans MS", system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+  background: linear-gradient(135deg, #ffe6f0, #e6f7ff);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.home, .yes-page { text-align: center; }
+
+h1 {
+  font-size: 2.5rem;
+  color: #ff5c8d;
+}
+
+.center-gif {
+  width: 200px;
+  margin: 20px auto;
+  display: block;
+}
+
+.buttons {
+  margin-top: 20px;
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+}
+
+button {
+  font-size: 1.5rem;
+  padding: 15px 30px;
+  border: none;
+  border-radius: 15px;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+button:hover { transform: scale(1.08); }
+
+.yes-btn {
+  background: linear-gradient(135deg, #7dffb2, #36d1dc);
+  color: white;
+}
+
+.no-btn {
+  background: linear-gradient(135deg, #ff9a9e, #fad0c4);
+  color: white;
+}
