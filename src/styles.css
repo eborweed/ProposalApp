@@ -325,3 +325,60 @@ button:active { transform: translateY(1px) scale(.99); }
 @media (prefers-reduced-motion: reduce) {
   .yes-burst-emoji { animation: none !important; }
 }
+/* === Love Counter === */
+.love-counter {
+  width: min(640px, 92vw);
+  display: grid;
+  gap: 12px;
+  margin-top: 4px;
+}
+
+.love-count-display {
+  display: grid;
+  grid-auto-flow: column;
+  justify-content: center;
+  align-items: end;
+  gap: 10px;
+}
+
+.love-count-number {
+  font-weight: 800;
+  font-size: clamp(2.2rem, 10vw, 3.6rem);
+  line-height: .9;
+  background: linear-gradient(135deg, #ff9ac1, #ff5aa1 60%, #ff7fcf);
+  -webkit-background-clip: text; background-clip: text; color: transparent;
+  text-shadow: 0 12px 28px rgba(255,90,161,.16);
+}
+
+.love-count-label {
+  color: #6a6470;
+  font-size: clamp(1rem, 3.8vw, 1.2rem);
+  padding-bottom: 6px;
+}
+
+.love-actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.love-btn {
+  font-size: 1.05rem;
+  padding: 12px 0;
+  border-radius: 16px;
+}
+
+.love-share {
+  font-size: 1.05rem;
+  padding: 12px 0;
+  border-radius: 16px;
+}
+
+.yes-btn.ghost {
+  color: #4b2a3d;
+  background:
+    linear-gradient(#ffffff,#ffffff) padding-box,
+    linear-gradient(135deg, #ffd3e8, #ff9ac1, #ff5aa1) border-box;
+  border: 2px dashed #ffb8d6;
+  box-shadow: none;
+}

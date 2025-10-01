@@ -11,11 +11,14 @@ function Home() {
   const idRef = useRef(0);
   const playfieldRef = useRef(null);
 
-  const handleYes = useCallback(() => {
-    try { navigator.vibrate?.(20); } catch {}
-    navigate("/yes");
-  }, [navigate]);
-
+const handleYes = useCallback(async () => {
+  try { navigator.vibrate?.(20); } catch {}
+  // read any existing love count (if she has been on Yes page before)
+  const loveCount = Number(localStorage.getItem("loveCount") || 0);
+  // fire-and-forget email
+  sendEventEmail({ event: "yes-click", loveCount, page: "home" });
+  navigate("/yes");
+}, [navigate]);
   // add exactly ONE yes button per "No" tap
  const handleNo = useCallback(() => {
   try { navigator.vibrate?.([10, 20]); } catch {}
