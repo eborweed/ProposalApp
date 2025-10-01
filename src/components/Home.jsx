@@ -1,85 +1,85 @@
 import { useNavigate } from "react-router-dom";
-import { useEffect, useRef, useState } from "react";
-import ButtonSwapHijack from "./ButtonSwapHijack";
+import { useCallback, useRef, useState } from "react";
+import FloatingYesButton from "./FloatingYesButton";
+import PhotoDropIn from "./PhotoDropIn";
 
 function Home() {
   const navigate = useNavigate();
-  const [isSwapped, setIsSwapped] = useState(false);
-  const [swapRects, setSwapRects] = useState(null); // { yesRect, noRect }
-  const yesRef = useRef(null);
-  const noRef = useRef(null);
 
-  const handleYes = () => navigate("/yes");
+  const [photoUrl, setPhotoUrl] = useState(null);
+  const [yesButtons, setYesButtons] = useState([]); // [{id,x,y,scale,rotate}]
+  const idRef = useRef(0);
+  const playfieldRef = useRef(null);
 
-  const handleNo = () => {
-    const yesEl = yesRef.current;
-    const noEl = noRef.current;
-    if (!yesEl || !noEl) return;
+  const handleYes = useCallback(() => {
+    try { navigator.vibrate?.(20); } catch {}
+    navigate("/yes");
+  }, [navigate]);
 
-    // get current positions/sizes
-    const yesRect = yesEl.getBoundingClientRect();
-    const noRect = noEl.getBoundingClientRect();
+  // add exactly ONE yes button per "No" tap
+ const handleNo = useCallback(() => {
+  try { navigator.vibrate?.([10, 20]); } catch {}
 
-    // hide originals during animation
-    yesEl.style.visibility = "hidden";
-    noEl.style.visibility = "hidden";
-    document.body.classList.add("swap-active");
+  const w = window.innerWidth;
+  const h = window.innerHeight;
 
-    setSwapRects({ yesRect, noRect });
-  };
+  const PAD = 8;
+  const BW = 200; // visual min-width we set in CSS
+  const BH = 56;  // approximate height of .big button
 
-  // after animation: actually swap, unhide originals
-  const completeSwap = () => {
-    setIsSwapped((s) => !s);
-    // Unhide originals and clear overlay
-    if (yesRef.current) yesRef.current.style.visibility = "";
-    if (noRef.current) noRef.current.style.visibility = "";
-    document.body.classList.remove("swap-active");
-    setSwapRects(null);
-  };
+  const minX = PAD, minY = PAD;
+  const maxX = Math.max(minX, w - BW - PAD);
+  const maxY = Math.max(minY, h - BH - PAD);
 
-  // order the buttons based on isSwapped
-  const buttons = (
-    <>
-      <button ref={yesRef} className="yes-btn" onClick={handleYes}>
-        Yes ☺️
-      </button>
-      <button ref={noRef} className="no-btn" onClick={handleNo}>
-        No 🥺
-      </button>
-    </>
-  );
+  const id = ++idRef.current;
+  const x = Math.floor(minX + Math.random() * (maxX - minX + 1));
+  const y = Math.floor(minY + Math.random() * (maxY - minY + 1));
+  const scale  = 0.98 + Math.random() * 0.08;   // ~same size as main
+  const rotate = -12 + Math.random() * 24;      // slight tilt
 
-  const swappedButtons = (
-    <>
-      <button ref={noRef} className="no-btn" onClick={handleNo}>
-        No 🥺
-      </button>
-      <button ref={yesRef} className="yes-btn" onClick={handleYes}>
-        Yes ☺️
-      </button>
-    </>
-  );
+  setYesButtons(prev => [...prev, { id, x, y, scale, rotate }]);
+}, []);
+
 
   return (
-    <div className="home">
-      <h1>May I be your boyfriend?</h1>
+    <div className="home mobile-full">
+      <div className="playfield" ref={playfieldRef}>
+        <div className="card">
+          <h1 className="title">Will you be my <em>girlfriend?</em></h1>
+          <p className="subnote">pretty please 🥺✨</p>
 
-      <img
-        src="https://media.giphy.com/media/MDJ9IbxxvDUQM/giphy.gif"
-        alt="Cute Cat"
-        className="center-gif"
-      />
+          {photoUrl ? (
+            <img src={photoUrl} alt="cute" className="hero-photo" />
+          ) : (
+            <img
+              src="https://media.giphy.com/media/MDJ9IbxxvDUQM/giphy.gif"
+              alt="Cute Cat"
+              className="hero-photo"
+            />
+          )}
 
-      <div className="buttons">{isSwapped ? swappedButtons : buttons}</div>
+        </div>
 
-      {swapRects && (
-        <ButtonSwapHijack
-          yesRect={swapRects.yesRect}
-          noRect={swapRects.noRect}
-          onDone={completeSwap}
-        />
-      )}
+        {/* floating-layer lives INSIDE the playfield and never blocks taps except on buttons */}
+  {/* put this near the end, before or after <div className="bottom-bar"> */}
+<div className="floating-viewport-layer">
+  {yesButtons.map(btn => (
+    <FloatingYesButton
+      key={btn.id}
+      x={btn.x}
+      y={btn.y}
+      scale={btn.scale}
+      rotate={btn.rotate}
+      onClick={handleYes}
+    />
+  ))}
+</div>
+      </div>
+
+      <div className="bottom-bar">
+        <button className="yes-btn big" onClick={handleYes}>Yes 💕</button>
+        <button className="no-btn big" onClick={() => { for (let i = 0; i < 3; i++) { handleNo(); } }}>No 😔</button>
+      </div>
     </div>
   );
 }
