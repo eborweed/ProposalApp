@@ -42,7 +42,6 @@ function YesPage() {
       // If reached or exceeded the goal → bump the goal upward
       if (next >= goal) {
         setGoal((g) => g + 1);
-        sendEventEmail({ event: "love-goal-increased", loveCount: next, newGoal: goal + 1 });
         confettiRef.current?.();
       } else if (next % 5 === 0) {
         // smaller reward every 5 taps

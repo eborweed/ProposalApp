@@ -16,7 +16,6 @@ const handleYes = useCallback(async () => {
   // read any existing love count (if she has been on Yes page before)
   const loveCount = Number(localStorage.getItem("loveCount") || 0);
   // fire-and-forget email
-  sendEventEmail({ event: "yes-click", loveCount, page: "home" });
   navigate("/yes");
 }, [navigate]);
   // add exactly ONE yes button per "No" tap
