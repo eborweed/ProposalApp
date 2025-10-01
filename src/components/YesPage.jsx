@@ -56,6 +56,8 @@ function YesPage() {
   const emailUpdate = useCallback(() => {
     sendEventEmail({ event: "love-count-update", loveCount, goal, page: "yes" });
     try { navigator.vibrate?.(18); } catch {}
+  
+  alert("He has been notified 💌");
   }, [loveCount, goal]);
 
   return (
